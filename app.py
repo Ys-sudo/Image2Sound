@@ -1,4 +1,5 @@
 import struct
+import os
 import time
 import wave
 from tkinter import *
@@ -16,7 +17,7 @@ def resource_path(relative_path):
         base_path = os.path.join(sys._MEIPASS, 'data')
     except Exception:
         # sys._MEIPASS is not defined, so use the original path
-        base_path = '/Users/Y-S/PycharmProjects/RGBsounds/'
+        base_path = os.path.abspath(os.getcwd())
 
     return os.path.join(base_path, relative_path)
 
@@ -48,10 +49,10 @@ def load():
 
         img1.configure(image=photo1)
 
-        #print('image loaded...')
+        print('image loaded...')
         pix.insert(INSERT, '\n' + 'image loaded...' + '\n')
         timing.configure(text=("Image loaded:" + '\n' + '\n'"--- %s seconds ---" % np.ceil(time.time() - start_time)))
-        #print("--- %s seconds ---" % (time.time() - start_time))
+        print("--- %s seconds ---" % (time.time() - start_time))
 
 
 def createsound():
@@ -106,7 +107,7 @@ def createsound():
 
         # duration* -2 [] , /3 for the number of pixels of each color
         num_samples = int((len(str1) - 2) / 3)
-        #print('number of pixels:'+ str(num_samples) +'...')
+        print('number of pixels:'+ str(num_samples) +'...')
 
         amplitude = int(txt1.get())
         # ##OUTPUT***
@@ -122,7 +123,9 @@ def createsound():
         sampling_rate = int(txt2.get())
         sampwidth = int(txt4.get())
 
+        print('opening wav')
         wav_file = wave.open(file, 'w')
+        print('opened wav')
         wav_file.setparams((nchannels, sampwidth, int(sampling_rate), nframes, comptype, compname))
 
         # we need to map rgb values:
@@ -135,7 +138,7 @@ def createsound():
         for x in str1[0::3]:
             x = (x * fm)
             frequency = x
-            # print(x, end=' ')
+            print(x, end=' ')
             sine_wave = [np.sin(2 * np.pi * frequency * x / sampling_rate) for x in range(num_samples)]
             for s in sine_wave:
                 wav_file.writeframes(struct.pack('h', int(s * amplitude)))
@@ -143,7 +146,7 @@ def createsound():
         for y in str1[1::3]:
             y = (y * fm)
             frequency = y
-            # print(y, end=' ')
+            print(y, end=' ')
             sine_wave = [np.sin(2 * np.pi * frequency * y / sampling_rate) for y in range(num_samples)]
             for s in sine_wave:
                 wav_file.writeframes(struct.pack('h', int(s * amplitude)))
@@ -151,19 +154,19 @@ def createsound():
         for z in str1[2::3]:
             z = (z * fm)
             frequency = z
-            # print(z, end=' ')
+            print(z, end=' ')
             sine_wave = [np.sin(2 * np.pi * frequency * z / sampling_rate) for z in range(num_samples)]
             for s in sine_wave:
                 wav_file.writeframes(struct.pack('h', int(s * amplitude)))
 
-        #print('sound created...')
+        print('sound created...')
         pix.insert(INSERT, '\n' + '.wav file created...' + '\n')
         timing.configure(text=("Sound created:" + '\n' + '\n'"--- %s seconds ---" % np.ceil(time.time() - start_time)))
-        #print("--- %s seconds ---" % (time.time() - start_time))
+        print("--- %s seconds ---" % (time.time() - start_time))
 
 
 def play():
-    #print('playback active...')
+    print('playback active...')
     filename = txt5.get()
     # define stream chunk
     chunk = 1024
@@ -195,20 +198,20 @@ def play():
 
 def clearnote():
     pix.delete('1.0', END)
-    #print('log cleared...')
+    print('log cleared...')
 
 
-#x = file = resource_path('kot2.jpg')
-#x1 = Image.open(x)
-#x1.thumbnail(maxsize, Image.NEAREST)
-#photo1 = ImageTk.PhotoImage(x1)
+x = file = resource_path('android.png')
+x1 = Image.open(x)
+x1.thumbnail(maxsize, Image.NEAREST)
+photo1 = ImageTk.PhotoImage(x1)
 #x2 = file = resource_path('audio.png')
 #audio = ImageTk.PhotoImage(Image.open(x2))
-#img1 = Label(window, image=photo1, bg="black", bd=-2)
+img1 = Label(window, image=photo1, bg="black", bd=-2)
 #plays = Button(window, image=audio, bg="black", bd=0, highlightbackground='black', highlightthickness=0, command=play)
 #img1.grid(row=7, column=0)
 #plays.grid(row=7, column=3)
-
+#
 # INTERFACE ITEMS
 # description
 bl = Label(window, bg="black", height=4, padx=10, fg="white", font="Courier 12 bold underline",
