@@ -4,7 +4,7 @@
 
 ## Experimental application that converts images into sounds based on the pixel's color data and audio parameters passed by the user.
 
-### To run download install imports (pip):
+### To run install required imports (pip install):
 - PyQt5
 - pyqtgraph
 - wave
